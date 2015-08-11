@@ -10,12 +10,24 @@ var yelp = require("yelp").createClient({
 
 // See http://www.yelp.com/developers/documentation/v2/search_api
 exports.getRestaurants = function(req, res) {
+  //take params from req
+  //feed into yelp search
+  params = {
+    term: '',
+    limit: '',
+    category_filter: '',
+    radius_filter: '',
+    ll: '',
+  };
 
-  yelp.search({term: "food", location: "Montreal"}, function(error, data) {
+  yelp.search(params, function(error, data) {
     if (err) {
       console.log(err);
     } else {
       console.log(data);
+      //filter data down to 3
+      //make request to uber api for cost estimates
+      //res.send(data)
     }
   });
 
