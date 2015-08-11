@@ -5,5 +5,8 @@
     "**/.*",
     "node_modules",
     "components"
-  ]
+  ],
+  "dependencies": {
+    "mobile-angular-ui": "~1.2.0-rc.3"
+  }
 }
