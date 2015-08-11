@@ -3,5 +3,6 @@ Tired of spending more time trying to figure out where you want to go than you s
 
 ## Development Team
 
-__Front-end:__ Daniel Tsui, Eric King, Nate Parrish
-__Back-end:__ Angela Wang, Sean Grogg
+__Front-end:__ [Daniel Tsui](https://github.com/sdtsui), [Eric King](https://github.com/EJKinger), [Nate Parrish](https://github.com/yakomaru)
+
+__Back-end:__ [Angela Wang](https://github.com/vaticancameo), [Sean Grogg](https://github.com/seangrogg)
