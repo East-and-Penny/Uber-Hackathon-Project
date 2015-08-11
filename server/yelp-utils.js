@@ -38,17 +38,17 @@ exports.getRestaurants = function(req, res) {
 
       //callback hell; to be refactored
       uber.estimatePrice(start, coord1, function(err, price1) {
-        if (err) {console.log(err)};
+        if (err) {console.log(err)}
+        data.businesses[0]['uber'] = price1; 
 
         uber.estimatePrice(start, coord2, function(err, price2) {
           if (err) {console.log(err)}
+          data.businesses[1]['uber'] = price2;
 
           uber.estimatePrice(start, coord3, function(err, price3) {
             if (err) {console.log(err)}
-            res.send({
-              YELP: data,
-              UBER: [price1, price2, price3]
-            })
+            data.businesses[2]['uber'] = price3;
+            res.send(data);
           });
       });
       });
