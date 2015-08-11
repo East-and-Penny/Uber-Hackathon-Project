@@ -3,7 +3,7 @@ var router = express.Router();
 var yelp = require('../yelp-utils.js')
 /* GET home page. */
 
-router.post('/getRestaurants', yelp.getRestaurants);
+router.get('/getRestaurants', yelp.getRestaurants);
 
 router.post('/confirmRestaurant', function(req, res){
   //route for confirming choice and dispatching uber

@@ -10,19 +10,21 @@ var yelp = require("yelp").createClient({
 
 // See http://www.yelp.com/developers/documentation/v2/search_api
 exports.getRestaurants = function(req, res) {
+  console.log('getting restaurants, will err from invalid params atm');
   //take params from req
   //feed into yelp search
   params = {
     term: '',
-    limit: '',
+    limit: 10,
     category_filter: '',
-    radius_filter: '',
+    radius_filter: 1000,
     ll: '',
   };
 
   yelp.search(params, function(error, data) {
-    if (err) {
-      console.log(err);
+
+    if (error) {
+      console.log(error);
     } else {
       console.log(data);
       //filter data down to 3
