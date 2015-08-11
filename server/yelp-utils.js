@@ -29,7 +29,6 @@ exports.getRestaurants = function(req, res) {
     } else {
       console.log(data);
       var dataCoordinates = [];
-      
       //filter data down to 3
       //make request to uber api for cost estimates
       //res.send(data)
