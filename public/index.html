@@ -1,13 +1,16 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <link rel="stylesheet" href="components/mobile-angular-ui/dist/css/mobile-angular-ui-base.min.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="components/mobile-angular-ui/dist/css/mobile-angular-ui-base.css" />
+    <link rel="stylesheet" href="css/style.css" />
     <script src="components/angular/angular.min.js">
     </script>
     <script src="components/angular-route/angular-route.min.js">
     </script>
     <script src="components/mobile-angular-ui/dist/js/mobile-angular-ui.min.js">
     </script>
+    <script src="components/angular-animate/angular-animate.min.js"></script>
     <script src="app.js"></script>
   </head>
 
@@ -56,17 +59,19 @@
 
     <div class="navbar navbar-app navbar-absolute-bottom">
       <div class="btn-group justified">
-        <a href="#" class="btn btn-navbar"><i class="fa fa-home fa-navbar"></i> Link x</a>
+        <a href="#/link1" class="btn btn-navbar"><i class="fa fa-home fa-navbar"></i> DEMO!!!</a>
         <a href="#" class="btn btn-navbar"><i class="fa fa-github fa-navbar"></i> Link y</a>
         <a href="#" class="btn btn-navbar"><i class="fa fa-exclamation-circle fa-navbar"></i> Link z</a>
       </div>
     </div>
 
     <!-- App Body -->
-    <div class="app-body">
-      <div class="app-content">
-        <ng-view class="ng-scope">
-        </ng-view>  
+    <div class=" view-animate-container">
+      <div class="app-body">
+        <div class="app-content">
+          <div ng-view class="ng-scope view-animate">
+          </div>  
+        </div>
       </div>
     </div>
 
