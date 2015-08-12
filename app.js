@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-
-=======
->>>>>>> added authentication, persists to req.session.passport.user
 var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
