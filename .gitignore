@@ -3,3 +3,4 @@ public/components
 .sass-cache
 .floo
 /server/config.js
+private.js
