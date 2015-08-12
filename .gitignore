@@ -4,3 +4,4 @@ public/components
 .floo
 /server/config.js
 private.js
+npm-debug.log
