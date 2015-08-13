@@ -1,8 +1,47 @@
-body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+.view-animate-container {
+  /*position:relative;
+  height:100px!important;
+  background:white;
+  border:1px solid black;
+  height:40px;
+  overflow:hidden;*/
 }
 
-a {
-  color: #00B7FF;
+.view-animate {
+/*  padding:10px;*/
+}
+
+.view-animate.ng-enter, .view-animate.ng-leave {
+  -webkit-transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) .5s;
+  transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) .5s;
+
+  display:block;
+  width:100%;
+  border-left:1px solid black;
+
+  position:absolute;
+  top:0;
+  left:0;
+  right:0;
+  bottom:0;
+/*  padding:10px;*/
+}
+
+.view-animate.ng-enter {
+  left:100%;
+}
+.view-animate.ng-enter.ng-enter-active {
+  left:0;
+}
+.view-animate.ng-leave.ng-leave-active {
+  left:-100%;
+}
+
+.loading {
+  width: 64px;
+  height: 64px;
+  position: absolute;
+  top: 38%;
+  left: 50%;
+  margin: 32px 0 0 -32px;
 }

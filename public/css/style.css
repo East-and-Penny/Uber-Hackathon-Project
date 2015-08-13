@@ -36,3 +36,12 @@
 .view-animate.ng-leave.ng-leave-active {
   left:-100%;
 }
+
+.loading {
+  width: 64px;
+  height: 64px;
+  position: absolute;
+  top: 38%;
+  left: 50%;
+  margin: 32px 0 0 -32px;
+}
