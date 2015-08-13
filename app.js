@@ -54,13 +54,13 @@ app.use(passport.session());
 passport.use('uber', new UberStrategy({
     authorizationURL: 'https://login.uber.com/oauth/authorize',
     tokenURL: 'https://login.uber.com/oauth/token',
-    clientID: process.env.UBER_ID || require('./private').clientID,
-    clientSecret: process.env.UBER_SECRET || require('./private').clientSecret,
+    clientID: process.env.UBER_ID || require('./server/config').UBER_CLIENT_ID,
+    clientSecret: process.env.UBER_SECRET || require('./server/config').UBER_CLIENT_SECRET,
     callbackURL: 'http://localhost:3000/auth/uber/callback'
   },
   function(accessToken, refreshToken, profile, done){
     // for debugging
-    // console.log('accessToken: ' + accessToken + '\nrefreshToken: ' + refreshToken + '\nprofile: ' + profile);
+    //console.log('accessToken: ' + accessToken + '\nrefreshToken: ' + refreshToken + '\nprofile: ' + profile);
     done(null, accessToken);
   }
 ));
