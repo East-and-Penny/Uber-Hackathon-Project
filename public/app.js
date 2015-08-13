@@ -9,62 +9,178 @@ angular.module('myApp', [
       // ...
       $routeProvider.when('/link1', {
         templateUrl: 'templates/select1.html',
-        controller: 'appCtrl as ctrl'
+        controller: 'appCtrl'
       });
       $routeProvider.when('/restaurant', {
         templateUrl: 'templates/select1.html',
-        controller: 'restaurantCtrl as ctrl'
+        controller: 'restaurantCtrl'
+      });
+      $routeProvider.when('/bar', {
+        templateUrl: 'templates/select1.html',
+        controller: 'barCtrl'
+      });
+      $routeProvider.when('/cafe', {
+        templateUrl: 'templates/select1.html',
+        controller: 'cafeCtrl'
+      });
+      $routeProvider.when('/groupsize', {
+        templateUrl: 'templates/select1.html',
+        controller: 'groupCtrl'
+      });
+      $routeProvider.when('/radius', {
+        templateUrl: 'templates/select1.html',
+        controller: 'radiusCtrl'
       });
   });
 
 angular.module('myApp')
-  .factory('appFact', function() {
-    return {choices: ''};
+  .factory('yelpFact', function() {
+    return {
+      category_filter: '',
+      radius_filter: undefined
+    };
   })
-  .controller('appCtrl', function($scope, $location, appFact) {
+  .factory('uberFact', function() {
+    return {
+    };
+  })
+  .controller('appCtrl', function($scope, $location) {
     $scope.choice1 = 'Restaurants';
     $scope.choice2 = 'Bars';
     $scope.choice3 = 'Cafes';
 
     $scope.choose1 = function() {
-      appFact.choices = $scope.choice1;
       $location.path('/restaurant');
     };
 
     $scope.choose2 = function() {
-      appFact.choices = $scope.choice2;
       $location.path('/bar');
     };
 
     $scope.choose3 = function() {
-      appFact.choices = $scope.choice3;
       $location.path('/cafe');
     };
-    // $location.path();
   })  
-  .controller('restaurantCtrl', function($scope, $location, appFact) {
+  .controller('restaurantCtrl', function($scope, $location, yelpFact) {
     $scope.choice1 = 'Breakfast and Brunch';
     $scope.choice2 = 'American';
     $scope.choice3 = 'No Preference';
 
     $scope.choose1 = function() {
-      appFact.choices += ',breakfast and brunch';
-      console.log(appFact.choices);
-      $location.path('/restaurant');
+      yelpFact.category_filter = 'restaurant,breakfast and brunch';
+      $location.path('/radius');
     };
 
     $scope.choose2 = function() {
-      appFact.choices += 'american';
-      $location.path('/bar');
+      yelpFact.category_filter = 'restaurant,american';
+      $location.path('/radius');
     };
 
     $scope.choose3 = function() {
-      $location.path('/cafe');
+      yelpFact.category_filter = 'restaurant';
+      $location.path('/radius');
     };
-    // $location.path();
+  })
+  .controller('barCtrl', function($scope, $location, yelpFact) {
+    $scope.choice1 = 'Dive Bar';
+    $scope.choice2 = 'Dance Club';
+    $scope.choice3 = 'No Preference';
+
+    $scope.choose1 = function() {
+      yelpFact.category_filter = 'bars,dive bars';
+      $location.path('/radius');
+    };
+
+    $scope.choose2 = function() {
+      yelpFact.category_filter = 'bars,dance clubs';
+      $location.path('/radius');
+    };
+
+    $scope.choose3 = function() {
+      yelpFact.category_filter = 'bars';
+      $location.path('/radius');
+    };
+  })
+  .controller('cafeCtrl', function($scope, $location, yelpFact) {
+    $scope.choice1 = 'Coffee & Tea';
+    $scope.choice2 = 'Desserts';
+    $scope.choice3 = 'No Preference';
+
+    $scope.choose1 = function() {
+      yelpFact.category_filter = 'cafes,coffee & tea';
+      $location.path('/radius');
+    };
+
+    $scope.choose2 = function() {
+      yelpFact.category_filter = 'cafes,desserts';
+      $location.path('/radius');
+    };
+
+    $scope.choose3 = function() {
+      yelpFact.category_filter = 'cafes';
+      $location.path('/radius');
+    };
+  })
+  .controller('radiusCtrl', function($scope, $location, yelpFact) {
+    $scope.choice1 = 'Less Than 5 Miles';
+    $scope.choice2 = 'Less Than 10 Miles';
+    $scope.choice3 = 'Less Than 15 Miles';
+
+    $scope.choose1 = function() {
+      yelpFact.radius_filter = 8049;
+      console.log(yelpFact);
+      $location.path('/');
+    };
+
+    $scope.choose2 = function() {
+      yelpFact.radius_filter = 16093;
+      $location.path('/');
+    };
+
+    $scope.choose3 = function() {
+      yelpFact.radius_filter = 24140;
+      $location.path('/');
+    };
+  })
+  .controller('groupCtrl', function($scope, $location, uberFact) {
+    $scope.choice1 = 'Small (1-2)';
+    $scope.choice2 = 'Medium (3-4)';
+    $scope.choice3 = 'Large (5-7)';
+
+    $scope.choose1 = function() {
+      $location.path('/');
+    };
+
+    $scope.choose2 = function() {
+      $location.path('/');
+    };
+
+    $scope.choose3 = function() {
+      $location.path('/');
+    };
   });
 
+// function ajaxRequest(url, method, cb) {
 
+// }
+
+function geoFindMe() {
+  if (!navigator.geolocation){
+    return 'err';
+  }
+
+  function success(position) {
+    var latitude  = position.coords.latitude;
+    var longitude = position.coords.longitude;
+
+    return latitude + ',' + longitude;
+  }
+
+  function error() {
+    return 'err';
+  }
+  navigator.geolocation.getCurrentPosition(success, error);
+}
 
   /*
 
