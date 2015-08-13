@@ -23,31 +23,69 @@ angular.module('myApp', [
         templateUrl: 'templates/select1.html',
         controller: 'cafeCtrl'
       });
-      $routeProvider.when('/groupsize', {
-        templateUrl: 'templates/select1.html',
-        controller: 'groupCtrl'
-      });
       $routeProvider.when('/radius', {
         templateUrl: 'templates/select1.html',
         controller: 'radiusCtrl'
+      });
+      $routeProvider.when('/group', {
+        templateUrl: 'templates/select1.html',
+        controller: 'groupCtrl'
+      });
+      $routeProvider.when('/loading', {
+        templateUrl: 'templates/loading.html',
+        controller: 'loadingCtrl'
+      });
+      $routeProvider.when('/results', {
+        templateUrl: 'templates/select1.html',
+        controller: 'resultsCtrl'
       });
   });
 
 angular.module('myApp')
   .factory('yelpFact', function() {
     return {
-      category_filter: '',
-      radius_filter: undefined
+      category_filter: undefined,
+      radius_filter: undefined,
+      cll: undefined
+    };
+  })
+  .factory('uberResultFact', function() {
+    return {
+      result: [
+        {
+          name: undefined,
+          snippet_text: undefined
+        },
+        {
+          name: undefined,
+          snippet_text: undefined
+        },
+        {
+          name: undefined,
+          snippet_text: undefined
+        }
+      ]
     };
   })
   .factory('uberFact', function() {
     return {
+      start_latitude: undefined,
+      start_longitude: undefined,
+      capacity: undefined
     };
   })
-  .controller('appCtrl', function($scope, $location) {
+  .controller('appCtrl', function($scope, $location, yelpFact, uberFact) {
     $scope.choice1 = 'Restaurants';
     $scope.choice2 = 'Bars';
     $scope.choice3 = 'Cafes';
+
+    $scope.location = function() {
+      geoFindMe(function(latlon){
+        yelpFact.cll = latlon[0] + ',' + latlon[1];
+        uberFact.start_latitude = latlon[0];
+        uberFact.start_longitude = latlon[1];
+      });
+    };
 
     $scope.choose1 = function() {
       $location.path('/restaurant');
@@ -60,6 +98,8 @@ angular.module('myApp')
     $scope.choose3 = function() {
       $location.path('/cafe');
     };
+
+    $scope.location();
   })  
   .controller('restaurantCtrl', function($scope, $location, yelpFact) {
     $scope.choice1 = 'Breakfast and Brunch';
@@ -82,8 +122,8 @@ angular.module('myApp')
     };
   })
   .controller('barCtrl', function($scope, $location, yelpFact) {
-    $scope.choice1 = 'Dive Bar';
-    $scope.choice2 = 'Dance Club';
+    $scope.choice1 = 'Dive Bars';
+    $scope.choice2 = 'Dance Clubs';
     $scope.choice3 = 'No Preference';
 
     $scope.choose1 = function() {
@@ -121,44 +161,208 @@ angular.module('myApp')
       $location.path('/radius');
     };
   })
-  .controller('radiusCtrl', function($scope, $location, yelpFact) {
-    $scope.choice1 = 'Less Than 5 Miles';
-    $scope.choice2 = 'Less Than 10 Miles';
-    $scope.choice3 = 'Less Than 15 Miles';
+  .controller('radiusCtrl', function($scope, $location, yelpFact, uberResultFact) {
+    $scope.choice1 = 'Less Than 5 Miles Away';
+    $scope.choice2 = 'Less Than 10 Miles Away';
+    $scope.choice3 = 'Less Than 15 Miles Away';
 
     $scope.choose1 = function() {
       yelpFact.radius_filter = 8049;
-      console.log(yelpFact);
-      $location.path('/');
+      ajaxRequest('/getRestaurants', function(data) {
+        uberResultFact.result = data;
+        console.log(data);
+      });
+      $location.path('/group');
     };
 
     $scope.choose2 = function() {
       yelpFact.radius_filter = 16093;
-      $location.path('/');
+      ajaxRequest('/getRestaurants', function(data) {
+        uberResultFact.result = data;
+      });
+      $location.path('/group');
     };
 
     $scope.choose3 = function() {
       yelpFact.radius_filter = 24140;
-      $location.path('/');
+      ajaxRequest('/getRestaurants', function(data) {
+        uberResultFact.result = data;
+      });
+      $location.path('/group');
     };
   })
   .controller('groupCtrl', function($scope, $location, uberFact) {
-    $scope.choice1 = 'Small (1-2)';
-    $scope.choice2 = 'Medium (3-4)';
-    $scope.choice3 = 'Large (5-7)';
+    $scope.choice1 = 'Small Group (1-2)';
+    $scope.choice2 = 'Medium Group (3-4)';
+    $scope.choice3 = 'Large Group (5-7)';
 
     $scope.choose1 = function() {
-      $location.path('/');
+      uberFact.capacity = 2;
+      $location.path('/loading');
     };
 
     $scope.choose2 = function() {
-      $location.path('/');
+      uberFact.capacity = 4;
+      $location.path('/loading');
     };
 
     $scope.choose3 = function() {
-      $location.path('/');
+      uberFact.capacity = 7;
+      $location.path('/loading');
+    };
+  })
+  .controller('loadingCtrl', function($scope, $location, uberResultFact) {
+    $scope.checkData = function() {
+      if(uberResultFact.result[0].name) {
+        $location.path('/results');
+      }
+    };
+    $scope.checkData();
+  })
+  .controller('resultsCtrl', function($scope, $location, uberResultFact) {
+    var text = 'Make Uber Request To ';
+    $scope.choice1 = text + uberResultFact.result[0].name + ': ' + uberResultFact.result[0].snippet_text;
+    if(uberResultFact.result[1].name) {
+      $scope.choice2 = text + uberResultFact.result[1].name + ': ' + uberResultFact.result[1].snippet_text;
+    } else {
+      $scope.choice2 = '';
+    }
+    if(uberResultFact.result[2].name) {
+      $scope.choice3 = text + uberResultFact.result[2].name + ': ' + uberResultFact.result[2].snippet_text;
+    } else {
+      $scope.choice3 = '';
+    }
+    var called = false;
+
+    $scope.choose1 = function() {
+      if(!called) {
+        called = true;
+        ajaxRequest('/confirmRestaurant', function(data) {
+          return data;
+        });
+      } else {
+        
+      }
+      // $location.path('/');
+    };
+
+    $scope.choose2 = function() {
+      if(!called && uberResultFact.result[1].name) {
+        called = true;
+        ajaxRequest('/confirmRestaurant', function(data) {
+          return data;
+        });
+      } else {
+        
+      }
+      // $location.path('/');
+    };
+
+    $scope.choose3 = function() {
+      if(!called && uberResultFact.result[2].name) {
+        called = true;
+        ajaxRequest('/confirmRestaurant', function(data) {
+          return data;
+        });
+      } else {
+        
+      }
+      // $location.path('/');
     };
   });
+
+function ajaxRequest(url, cb) {
+  $.post(url, function(data) {
+    cb(data);
+  });
+}
+
+function geoFindMe(cb) {
+  if (!navigator.geolocation){
+    throw 'no gps detected';
+  }
+
+  function success(position) {
+    var latitude  = position.coords.latitude;
+    var longitude = position.coords.longitude;
+
+    cb([latitude, longitude]);
+  }
+
+  function error() {
+    throw 'error occured when obtaining location data';
+  }
+  navigator.geolocation.getCurrentPosition(success, error);
+}
+
+/*
+
+/*
+{
+  "businesses": [
+    {
+      "uber": price,
+      "categories": [
+        [
+          "Local Flavor",
+          "localflavor"
+        ],
+        [
+          "Mass Media",
+          "massmedia"
+        ]
+      ],
+      "display_phone": "+1-415-908-3801",
+      "id": "yelp-san-francisco",
+      "is_claimed": true,
+      "is_closed": false,
+      "image_url": "http://s3-media2.ak.yelpcdn.com/bphoto/7DIHu8a0AHhw-BffrDIxPA/ms.jpg",
+      "location": {
+        "address": [
+          "140 New Montgomery St"
+        ],
+        "city": "San Francisco",
+        "country_code": "US",
+        "cross_streets": "3rd St & Opera Aly",
+        "display_address": [
+          "140 New Montgomery St",
+          "(b/t Natoma St & Minna St)",
+          "SOMA",
+          "San Francisco, CA 94105"
+        ],
+        "neighborhoods": [
+          "SOMA"
+        ],
+        "postal_code": "94105",
+        "state_code": "CA"
+      },
+      "mobile_url": "http://m.yelp.com/biz/4kMBvIEWPxWkWKFN__8SxQ",
+      "name": "Yelp",
+      "phone": "4159083801",
+      "rating_img_url": "http://media1.ak.yelpcdn.com/static/201012161694360749/img/ico/stars/stars_3.png",
+      "rating_img_url_large": "http://media3.ak.yelpcdn.com/static/201012161053250406/img/ico/stars/stars_large_3.png",
+      "rating_img_url_small": "http://media1.ak.yelpcdn.com/static/201012162337205794/img/ico/stars/stars_small_3.png",
+      "review_count": 3347,
+      "snippet_image_url": "http://s3-media2.ak.yelpcdn.com/photo/LjzacUeK_71tm2zPALcj1Q/ms.jpg",
+      "snippet_text": "Sometimes we ask questions without reading an email thoroughly as many of us did for the last event.  In honor of Yelp, the many questions they kindly...",
+      "url": "http://www.yelp.com/biz/yelp-san-francisco",
+      "menu_provider": "yelp",
+      "menu_date_updated": 1317414369
+    }
+  ],
+  "region": {
+    "center": {
+      "latitude": 37.786138600000001,
+      "longitude": -122.40262130000001
+    },
+    "span": {
+      "latitude_delta": 0.0,
+      "longitude_delta": 0.0
+    }
+  },
+  "total": 10651
+}
+
 
 // function ajaxRequest(url, method, cb) {
 
@@ -182,7 +386,6 @@ function geoFindMe() {
   navigator.geolocation.getCurrentPosition(success, error);
 }
 
-  /*
 
 queryData: 
 {
@@ -201,27 +404,27 @@ radius_filter: [int = user specified]
 Name  Data Type Required / Optional Description
 
 term  string  optional  
-  Search term (e.g. "food", "restaurants"). If term isn’t included we search everything.
+  r term (e.g. "food", "restaurants"). If term isn’t included we r everything.
 limit number  optional  Number of business results to return
 
 offset  number  optional  
   Offset the list of returned business results by this amount
 
 sort  number  optional  
-  Sort mode: 0=Best matched (default), 1=Distance, 2=Highest Rated. If the mode is 1 or 2 a search may retrieve an additional 20 businesses past the initial limit of the first 20 results. This is done by specifying an offset and limit of 20. Sort by distance is only supported for a location or geographic search. The rating sort is not strictly sorted by the rating value, but by an adjusted rating value that takes into account the number of ratings, similar to a bayesian average. This is so a business with 1 rating of 5 stars doesn’t immediately jump to the top.
+  Sort mode: 0=Best matched (default), 1=Distance, 2=Highest Rated. If the mode is 1 or 2 a r may retrieve an additional 20 businesses past the initial limit of the first 20 results. This is done by specifying an offset and limit of 20. Sort by distance is only supported for a location or geographic r. The rating sort is not strictly sorted by the rating value, but by an adjusted rating value that takes into account the number of ratings, similar to a bayesian average. This is so a business with 1 rating of 5 stars doesn’t immediately jump to the top.
 
 category_filter string  optional  
-  Category to filter search results with. See the list of supported categories. The category filter can be a list of comma delimited categories. For example, 'bars,french' will filter by Bars and French. The category identifier should be used (for example 'discgolf', not 'Disc Golf').
+  Category to filter r results with. See the list of supported categories. The category filter can be a list of comma delimited categories. For example, 'bars,french' will filter by Bars and French. The category identifier should be used (for example 'discgolf', not 'Disc Golf').
 
 radius_filter number  optional  
-  Search radius in meters. If the value is too large, a AREA_TOO_LARGE error may be returned. The max value is 40000 meters (25 miles).
+  r radius in meters. If the value is too large, a AREA_TOO_LARGE error may be returned. The max value is 40000 meters (25 miles).
 
 deals_filter  bool  optional  
-  Whether to exclusively search for businesses with deals
+  Whether to exclusively r for businesses with deals
 
 
 
 Sample Request:
-http://api.yelp.com/v2/search?term=food&location=San+Francisco
+http://api.yelp.com/v2/r?term=food&location=San+Francisco
   */
   
