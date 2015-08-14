@@ -10,8 +10,8 @@ var yelp = require("yelp").createClient({
 
 // See http://www.yelp.com/developers/documentation/v2/search_api
 exports.getRestaurants = function(req, res) {
-  //need oauth uber token to get price estimates
-  console.log('getting restaurants data and uber prices with stubbed out params');
+  
+  console.log(req.body);
   //take params from req
   //feed into yelp search
   params = {

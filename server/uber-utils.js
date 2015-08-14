@@ -6,7 +6,7 @@ var uber = new Uber({
   client_id: config.UBER_CLIENT_ID,
   client_secret: config.UBER_CLIENT_SECRET,
   server_token: config.UBER_SERVER_TOKEN,
-  redirect_uri: '',
+  redirect_uri: 'http://localhost:3000/auth/uber/callback',
   name: 'Undecided'
 });
 
