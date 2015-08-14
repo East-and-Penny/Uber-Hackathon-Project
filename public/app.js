@@ -327,41 +327,41 @@ angular.module('myApp')
 
 
 
-    $scope.choose1 = function() {
-      if(!called) {
-        called = true;
-        ajaxRequest('api/confirmRestaurant', function(data) {
-          return data;
-        });
-      } else {
+    // $scope.choose1 = function() {
+    //   if(!called) {
+    //     called = true;
+    //     ajaxRequest('api/confirmRestaurant', function(data) {
+    //       return data;
+    //     });
+    //   } else {
         
-      }
-      // $location.path('/');
-    };
+    //   }
+    //   // $location.path('/');
+    // };
 
-    $scope.choose2 = function() {
-      if(!called && suggestedBusinesses[1].name) {
-        called = true;
-        ajaxRequest('api/confirmRestaurant', function(data) {
-          return data;
-        });
-      } else {
+    // $scope.choose2 = function() {
+    //   if(!called && suggestedBusinesses[1].name) {
+    //     called = true;
+    //     ajaxRequest('api/confirmRestaurant', function(data) {
+    //       return data;
+    //     });
+    //   } else {
         
-      }
-      // $location.path('/');
-    };
+    //   }
+    //   // $location.path('/');
+    // };
 
-    $scope.choose3 = function() {
-      if(!called && suggestedBusinesses[2].name) {
-        called = true;
-        ajaxRequest('api/confirmRestaurant', function(data) {
-          return data;
-        });
-      } else {
+    // $scope.choose3 = function() {
+    //   if(!called && suggestedBusinesses[2].name) {
+    //     called = true;
+    //     ajaxRequest('api/confirmRestaurant', function(data) {
+    //       return data;
+    //     });
+    //   } else {
         
-      }
+    //   }
       // $location.path('/');
-    };
+    // };
   });
 
 function ajaxRequest(url, cb, obj) {
