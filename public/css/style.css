@@ -4,38 +4,32 @@
   background:white;
   border:1px solid black;
   height:40px;
-  overflow:hidden;*/
-}
+  overflow:hidden;*/ }
 
 .view-animate {
-/*  padding:10px;*/
-}
+  /*  padding:10px;*/ }
 
 .view-animate.ng-enter, .view-animate.ng-leave {
-  -webkit-transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) .5s;
-  transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) .5s;
-
-  display:block;
-  width:100%;
-  border-left:1px solid black;
-
-  position:absolute;
-  top:0;
-  left:0;
-  right:0;
-  bottom:0;
-/*  padding:10px;*/
-}
+  -webkit-transition: all cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.5s;
+  transition: all cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.5s;
+  display: block;
+  width: 100%;
+  border-left: 1px solid black;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  /*  padding:10px;*/ }
 
 .view-animate.ng-enter {
-  left:100%;
-}
+  left: 100%; }
+
 .view-animate.ng-enter.ng-enter-active {
-  left:0;
-}
+  left: 0; }
+
 .view-animate.ng-leave.ng-leave-active {
-  left:-100%;
-}
+  left: -100%; }
 
 .loading {
   width: 64px;
@@ -43,5 +37,42 @@
   position: absolute;
   top: 38%;
   left: 50%;
-  margin: 32px 0 0 -32px;
+  margin: 32px 0 0 -32px; }
+
+.page-header {
+  text-align: center;
+  margin-top: 25%;
+}
+
+.uber-login-logo {
+  position: absolute;
+  max-width: 50%;
+  bottom: 5;
+  left: 25%;
+}
+.login-button {
+  position: absolute;
+  left: 50%;
+  margin-left: -30.375px ;
+}
+.selection-container {
+  display: inline-block;
+  max-height: 33%;
+  position: absolute; 
+  top: 50%; 
+  left: 50%; 
+  transform: translate(-50%, -50%);
+  white-space: nowrap;
+}
+.selection-title {
+  display: inline-block;
+  margin: auto;
+  vertical-align: middle;
+  line-height: 100%;
+}
+.selection-icon {
+  margin-left: 20px;
+  display: inline-block;
+  max-width: 60px;
+  max-height: 60px;
 }
