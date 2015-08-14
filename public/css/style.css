@@ -74,3 +74,9 @@
   display: inline-block;
   max-width: 60px;
   max-height: 60px; }
+
+.bookingTextContainer {
+ margin: auto,
+ line-height: 2vh,
+}
+

@@ -36,7 +36,7 @@ angular.module('myApp', [
         controller: 'loadingCtrl'
       });
       $routeProvider.when('/results', {
-        templateUrl: 'templates/select1.html',
+        templateUrl: 'templates/selectView.html',
         controller: 'resultsCtrl'
       });
   });
@@ -188,7 +188,6 @@ angular.module('myApp')
       yelpFact.radius_filter = 8049;
       ajaxRequest('api/getRestaurants', function(data) {
         uberResultFact.result = data.businesses;
-        console.log(data);
       });
       $location.path('/loading');
 
@@ -248,18 +247,40 @@ angular.module('myApp')
     checkData();
   })
   .controller('resultsCtrl', function($scope, $location, uberResultFact) {
+    var suggestedBusinesses = uberResultFact.result.map(function(item){
+      var business = {};
+      business.name = item.name;
+      business.phone = item.display_phone;
+      business.image = item.image_url;
+      business.ratingImage = item.rating_img_url;
+      business.review_count = item.review_count;
+      business.uberXPrice = item.uber.prices[0].estimate;
+      business.uberXLPrice = item.uber.prices[1].estimate;
+      business.uberBlackPrice = item.uber.prices[2].estimate;
+      return business;
+    });
+    console.log(suggestedBusinesses);
+
     var text = 'Make Uber Request To ';
-    $scope.choice1 = text + uberResultFact.result[0].name + ': ' + uberResultFact.result[0].snippet_text;
+    /*
+    $scope.choice1-3, business names
+    $scope.imageRoute1-6 biz img, biz rating img
+    */
+
+
+    $scope.choice1 = text + suggestedBusinesses[0].name + ': ' + suggestedBusinesses[0].snippet_text;
     if(uberResultFact.result[1].name) {
-      $scope.choice2 = text + uberResultFact.result[1].name + ': ' + uberResultFact.result[1].snippet_text;
+      $scope.choice2 = text + suggestedBusinesses[1].name + ': ' + suggestedBusinesses[1].snippet_text;
     } else {
       $scope.choice2 = '';
     }
-    if(uberResultFact.result[2].name) {
-      $scope.choice3 = text + uberResultFact.result[2].name + ': ' + uberResultFact.result[2].snippet_text;
+    if(suggestedBusinesses[2].name) {
+      $scope.choice3 = text + suggestedBusinesses[2].name + ': ' + suggestedBusinesses[2].snippet_text;
     } else {
       $scope.choice3 = '';
     }
+
+    $scope.choice1 = uberResultFactresult[0].name.uber[0];
     var called = false;
 
     $scope.choose1 = function() {
@@ -275,7 +296,7 @@ angular.module('myApp')
     };
 
     $scope.choose2 = function() {
-      if(!called && uberResultFact.result[1].name) {
+      if(!called && suggestedBusinesses[1].name) {
         called = true;
         ajaxRequest('api/confirmRestaurant', function(data) {
           return data;
@@ -287,7 +308,7 @@ angular.module('myApp')
     };
 
     $scope.choose3 = function() {
-      if(!called && uberResultFact.result[2].name) {
+      if(!called && suggestedBusinesses[2].name) {
         called = true;
         ajaxRequest('api/confirmRestaurant', function(data) {
           return data;
