@@ -247,20 +247,25 @@ angular.module('myApp')
     checkData();
   })
   .controller('resultsCtrl', function($scope, $location, uberResultFact) {
-    var suggestedBusinesses = uberResultFact.result.map(function(item){
+    console.log(uberResultFact.result);
+    console.log(JSON.stringify(uberResultFact.result));
+    var suggestedBusinesses = uberResultFact.result.map(function(item, index){
       var business = {};
+      business.index = index;
       business.name = item.name;
       business.phone = item.display_phone;
       business.image = item.image_url;
       business.ratingImage = item.rating_img_url;
-      business.review_count = item.review_count;
+      business.ratingCount = item.review_count;
       business.uberXPrice = item.uber.prices[0].estimate;
+      business.uberXDuration = Math.floor(item.uber.prices[0].duration/60);
+
       business.uberXLPrice = item.uber.prices[1].estimate;
       business.uberBlackPrice = item.uber.prices[2].estimate;
       return business;
     });
     console.log(suggestedBusinesses);
-
+    $scope.sb = suggestedBusinesses;
     var text = 'Make Uber Request To ';
     /*
     $scope.choice1-3, business names
@@ -268,20 +273,40 @@ angular.module('myApp')
     */
 
 
-    $scope.choice1 = text + suggestedBusinesses[0].name + ': ' + suggestedBusinesses[0].snippet_text;
-    if(uberResultFact.result[1].name) {
-      $scope.choice2 = text + suggestedBusinesses[1].name + ': ' + suggestedBusinesses[1].snippet_text;
-    } else {
-      $scope.choice2 = '';
-    }
-    if(suggestedBusinesses[2].name) {
-      $scope.choice3 = text + suggestedBusinesses[2].name + ': ' + suggestedBusinesses[2].snippet_text;
-    } else {
-      $scope.choice3 = '';
-    }
+    // $scope.choice1 = text + suggestedBusinesses[0].name + ': ' + suggestedBusinesses[0].snippet_text;
+    // if(uberResultFact.result[1].name) {
+    //   $scope.choice2 = text + suggestedBusinesses[1].name + ': ' + suggestedBusinesses[1].snippet_text;
+    // } else {
+    //   $scope.choice2 = '';
+    // }
+    // if(suggestedBusinesses[2].name) {
+    //   $scope.choice3 = text + suggestedBusinesses[2].name + ': ' + suggestedBusinesses[2].snippet_text;
+    // } else {
+    //   $scope.choice3 = '';
+    // }
 
-    $scope.choice1 = uberResultFactresult[0].name.uber[0];
+    // $scope.choice1 = uberResultFact.result[0].name.uber[0];
     var called = false;
+
+    $scope.bookRide = function(biz) {
+      console.log('event:', biz);
+        /**
+         * TODO : Take info/index from event to book a ride at the right locations!
+         * May need to get biz location (latLong) and save before making a real request.
+         * @type {Boolean}
+         */
+      if(!called) {
+        called = true;
+        ajaxRequest('api/confirmRestaurant', function(data) {
+          return data;
+        });
+      } else {
+        
+      }
+      // $location.path('/');
+    };
+
+
 
     $scope.choose1 = function() {
       if(!called) {

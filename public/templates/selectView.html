@@ -1,45 +1,29 @@
 <section class="section container-fluid ng-scope">
-  <div class="list-group-item list-group-item-home" style="height: 33%" ng-click="choose1()">
-
-    <div class='business-container'>
-      <h2 class='business-name'>{{choice1}}</h2>
-      <img class='business-image' src='{{imageRoute1}}'>
-      <img class='rating-icon' src='{{imageRoute2}}'>
-    </div>
-
-    <div class="uber-container">
-      <div class="bookRideButton">
-        <img src='img/uber-badge.png'>
-        <span class="textcontainer">
-          <div>UberX</div>
-          <div>Price: {{}}</div>
-          <div>Time: </div>
-        </span>
+  <div ng-repeat="biz in sb">
+    <div class='venue-card' ng-click="bookRide(biz);">
+      <div class='venue-left-box'>
+        <h2 class='business-name'>{{biz.name}}</h2>
+        <div class='rating-holder'>
+        <img class='rating-icon' src={{biz.ratingImage}}> <span class='rating-text'> {{biz.ratingCount}} Reviews</span>
+        </div>
       </div>
 
-      <div class="bookRideButton">
-        <img src='img/uber-badge.png'>
-        <span class="textcontainer">
-          <div>UberBlack</div>
-          <div>Price: {{}}</div>
-          <div>Time: </div>
-        </span>
+      <div class='venue-center-box'>
+        <img class='business-image' src={{biz.image}}>
       </div>
-    </div>
 
-  </div>
-  <div class="list-group-item list-group-item-home" style="height: 33%" ng-click="choose2()">
-    <div class='selection-container'>
-      <h2 class='business-name'>{{choice2}}</h2>
-      <img class='business-image' src='{{imageRoute3}}'>
-      <img class='rating-icon' src='{{imageRoute4}}'>
-    </div>
-  </div>
-  <div class="list-group-item list-group-item-home" style="height: 33%" ng-click="choose3()">
-    <div class='selection-container'>
-      <h2 class='business-name'>{{choice3}}</h2>
-      <img class='business-image' src='{{imageRoute5}}'>
-      <img class='rating-icon' src='{{imageRoute6}}'>
-    </div>
+      <div class='venue-right-box'>
+        <div class="uber-container">
+          <div class="bookRideButton">
+            <div><img class="booking-badge"src='./img/uber-badge.png'></div>
+            <span class="uber-textcontainer">
+              <div class="uber-type">UberX</div>
+              <div class="uber-detail">Price : {{biz.uberXPrice}}</div>
+              <div class="uber-detail">{{biz.uberXDuration}} Minute(s)</div>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>   
   </div>
 </section>
