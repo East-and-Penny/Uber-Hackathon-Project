@@ -77,6 +77,81 @@
 
 .bookingTextContainer {
  margin: auto,
- line-height: 2vh,
+ line-height: 2vh
+}
+.textcontainer {
+  float: left;
 }
 
+.venue-card {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  width: 100%;
+  height:33%;
+}
+
+.venue-left-box {
+  flex: 2;
+  margin: auto;
+}
+
+.venue-center-box {
+  flex: 2;
+  margin:auto;
+}
+
+.venue-right-box {
+  flex: 1;
+  margin:auto;
+}
+
+.business-image {
+  width: 70%;
+  height:90%;
+}
+
+.uber-textcontainer {
+  float:left;
+  color: black;
+  font-size: 100%;
+  margin: 2vh;
+}
+
+.rating-holder {
+  display: table;
+  overflow: hidden;
+  height: auto;
+  width: auto;
+}
+.rating-text {
+  color: black;
+  font-size: 100%;
+  display: table-cell;
+  vertical-align: middle;
+  left: 1vw;
+}
+
+.booking-badge {
+  width: 40%;
+  height: 40%;
+}
+
+
+@media only screen and (max-device-width: 480px) {
+  .booking-badge {
+    width: 65%;
+    height: 30%;
+  }
+  
+}
+
+.uber-type {
+  font-family: garamond;
+  font-size: 3vh;
+  font-style: strong;
+}
+.uber-detail {
+  font-family:garamond;
+  font-size: 2vh;
+}
