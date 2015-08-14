@@ -15,12 +15,12 @@ exports.getRestaurants = function(req, res) {
   //take params from req
   //feed into yelp search
   params = {
-    term: 'san francisco food',
     limit: 3,
-    category_filter: '',
-    radius_filter: 1000,
-    ll: '37.7833, -122.4167',
+    category_filter: req.body.category_filter,
+    radius_filter: req.body.radius_filter,
+    ll: req.body.cll,
   };
+  console.log(params);
   
   yelp.search(params, function(error, data) {
 
@@ -28,9 +28,9 @@ exports.getRestaurants = function(req, res) {
       console.log(error);
       res.send(404);
     } else {
-
-      var start = {latitude: 37.7833, longitude: -122.4167};
-
+      var arr = req.body.cll.split(',');
+      var start = {latitude: Number(arr[0]), longitude: Number(arr[1])};
+      console.log(start);
       var b = data.businesses;
       var coord1 = b[0]['location']['coordinate'];
       var coord2 = b[1]['location']['coordinate'];

@@ -10,9 +10,10 @@ var uber = 'https://sandbox-api.uber.com/'
 router.post('/getRestaurants', yelp.getRestaurants);
 
 router.post('/confirmRestaurant', function(req, res){
-  //route for confirming choice and dispatching uber
+
   console.log(req.body);
-  request.post(uber + 'v1/requests', {form: {
+  console.log(req.session.passport.user);
+  request.post(uber + 'v1/requests', {auth: {bearer: req.session.passport.user}}, {form: {
     product_id: req.body.product_id,
     start_latitude: req.body.start_latitude,
     start_longitude: req.body.start_longitude,
@@ -26,7 +27,7 @@ router.post('/confirmRestaurant', function(req, res){
     } else {
       console.log('request denied');
     }
-  })
+  });
 });
 
 router.post('/cancelRide', function(req, res){
@@ -38,7 +39,7 @@ router.post('/cancelRide', function(req, res){
     } else {
       console.log('request not cancelled?');
     }
-  })
+  });
 });
 
 module.exports = router;

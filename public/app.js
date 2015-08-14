@@ -39,6 +39,10 @@ angular.module('myApp', [
         templateUrl: 'templates/selectView.html',
         controller: 'resultsCtrl'
       });
+      $routeProvider.when('/end', {
+        templateUrl: 'templates/end.html',
+        controller: 'resultsCtrl'
+      });
   });
 
 angular.module('myApp')
@@ -114,17 +118,17 @@ angular.module('myApp')
     $scope.imageRoute2 = 'pizza.png';
 
     $scope.choose1 = function() {
-      yelpFact.category_filter = 'restaurant,breakfast and brunch';
+      yelpFact.category_filter = 'breakfast_brunch';
       $location.path('/radius');
     };
 
     $scope.choose2 = function() {
-      yelpFact.category_filter = 'restaurant,american';
+      yelpFact.category_filter = 'tradamerican';
       $location.path('/radius');
     };
 
     $scope.choose3 = function() {
-      yelpFact.category_filter = 'restaurant';
+      yelpFact.category_filter = 'restaurants';
       $location.path('/radius');
     };
   })
@@ -138,12 +142,12 @@ angular.module('myApp')
 
 
     $scope.choose1 = function() {
-      yelpFact.category_filter = 'bars,dive bars';
+      yelpFact.category_filter = 'divebars';
       $location.path('/radius');
     };
 
     $scope.choose2 = function() {
-      yelpFact.category_filter = 'bars,dance clubs';
+      yelpFact.category_filter = 'danceclubs';
       $location.path('/radius');
     };
 
@@ -161,12 +165,12 @@ angular.module('myApp')
     $scope.imageRoute2 = 'dessert.png';
 
     $scope.choose1 = function() {
-      yelpFact.category_filter = 'cafes,coffee & tea';
+      yelpFact.category_filter = 'coffee';
       $location.path('/radius');
     };
 
     $scope.choose2 = function() {
-      yelpFact.category_filter = 'cafes,desserts';
+      yelpFact.category_filter = 'desserts';
       $location.path('/radius');
     };
 
@@ -188,7 +192,7 @@ angular.module('myApp')
       yelpFact.radius_filter = 8049;
       ajaxRequest('api/getRestaurants', function(data) {
         uberResultFact.result = data.businesses;
-      });
+      }, yelpFact);
       $location.path('/loading');
 
     };
@@ -197,7 +201,7 @@ angular.module('myApp')
       yelpFact.radius_filter = 16093;
       ajaxRequest('api/getRestaurants', function(data) {
         uberResultFact.result = data.businesses;
-      });
+      }, yelpFact);
       $location.path('/loading');
 
     };
@@ -206,7 +210,7 @@ angular.module('myApp')
       yelpFact.radius_filter = 24140;
       ajaxRequest('api/getRestaurants', function(data) {
         uberResultFact.result = data.businesses;
-      });
+      }, yelpFact);
       $location.path('/loading');
 
     };
@@ -241,12 +245,12 @@ angular.module('myApp')
       if(uberResultFact.result[0].name) {
         $location.path('/results');
       } else {
-        $timeout(checkData, 1000);
+        $timeout(checkData, 100);
       }
     };
     checkData();
   })
-  .controller('resultsCtrl', function($scope, $location, uberResultFact) {
+  .controller('resultsCtrl', function($scope, $location, uberResultFact, uberFact) {
     console.log(uberResultFact.result);
     console.log(JSON.stringify(uberResultFact.result));
     var suggestedBusinesses = uberResultFact.result.map(function(item, index){
@@ -258,10 +262,13 @@ angular.module('myApp')
       business.ratingImage = item.rating_img_url;
       business.ratingCount = item.review_count;
       business.uberXPrice = item.uber.prices[0].estimate;
+      business.uberXID = item.uber.prices[0].product_id;
       business.uberXDuration = Math.floor(item.uber.prices[0].duration/60);
-
+      business.latLon = [item.location.coordinate.latitude, item.location.coordinate.longitude];
       business.uberXLPrice = item.uber.prices[1].estimate;
+      business.uberXLID = item.uber.prices[1].product_id;
       business.uberBlackPrice = item.uber.prices[2].estimate;
+      business.uberBlackID = item.uber.prices[2].product_id;
       return business;
     });
     console.log(suggestedBusinesses);
@@ -290,16 +297,33 @@ angular.module('myApp')
 
     $scope.bookRide = function(biz) {
       console.log('event:', biz);
+      var obj = {
+        product_id: biz.uberXID,
+        start_latitude: uberFact.start_latitude,
+        start_longitude: uberFact.start_longitude,
+        end_latitude: biz.latLon[0],
+        end_longitude: biz.latLon[1]
+      };
+      // request.post(uber + 'v1/requests', {form: {
+      //   product_id: req.body.pid,
+      //   start_latitude: req.body.startLat,
+      //   start_longitude: req.body.starLong,
+      //   end_latitude: req.body.endLat,
+      //   end_longitude: req.body.endLong,
+      //   surge_confirmation_id: req.body.surgeConfirm
+      // }}
+
         /**
          * TODO : Take info/index from event to book a ride at the right locations!
          * May need to get biz location (latLong) and save before making a real request.
          * @type {Boolean}
          */
+      $location.path('/end');
       if(!called) {
         called = true;
         ajaxRequest('api/confirmRestaurant', function(data) {
-          return data;
-        });
+          console.log(data);
+        }, obj);
       } else {
         
       }
@@ -308,45 +332,46 @@ angular.module('myApp')
 
 
 
-    $scope.choose1 = function() {
-      if(!called) {
-        called = true;
-        ajaxRequest('api/confirmRestaurant', function(data) {
-          return data;
-        });
-      } else {
+    // $scope.choose1 = function() {
+    //   if(!called) {
+    //     called = true;
+    //     ajaxRequest('api/confirmRestaurant', function(data) {
+    //       return data;
+    //     });
+    //   } else {
         
-      }
-      // $location.path('/');
-    };
+    //   }
+    //   // $location.path('/');
+    // };
 
-    $scope.choose2 = function() {
-      if(!called && suggestedBusinesses[1].name) {
-        called = true;
-        ajaxRequest('api/confirmRestaurant', function(data) {
-          return data;
-        });
-      } else {
+    // $scope.choose2 = function() {
+    //   if(!called && suggestedBusinesses[1].name) {
+    //     called = true;
+    //     ajaxRequest('api/confirmRestaurant', function(data) {
+    //       return data;
+    //     });
+    //   } else {
         
-      }
-      // $location.path('/');
-    };
+    //   }
+    //   // $location.path('/');
+    // };
 
-    $scope.choose3 = function() {
-      if(!called && suggestedBusinesses[2].name) {
-        called = true;
-        ajaxRequest('api/confirmRestaurant', function(data) {
-          return data;
-        });
-      } else {
+    // $scope.choose3 = function() {
+    //   if(!called && suggestedBusinesses[2].name) {
+    //     called = true;
+    //     ajaxRequest('api/confirmRestaurant', function(data) {
+    //       return data;
+    //     });
+    //   } else {
         
-      }
+    //   }
       // $location.path('/');
-    };
+    // };
   });
 
-function ajaxRequest(url, cb) {
-  $.post(url, function(data) {
+function ajaxRequest(url, cb, obj) {
+  obj = obj || {};
+  $.post(url, obj, function(data) {
     cb(data);
   });
 }
