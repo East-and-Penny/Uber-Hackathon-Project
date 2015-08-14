@@ -39,6 +39,10 @@ angular.module('myApp', [
         templateUrl: 'templates/selectView.html',
         controller: 'resultsCtrl'
       });
+      $routeProvider.when('/end', {
+        templateUrl: 'templates/end.html',
+        controller: 'resultsCtrl'
+      });
   });
 
 angular.module('myApp')
@@ -314,6 +318,7 @@ angular.module('myApp')
          * May need to get biz location (latLong) and save before making a real request.
          * @type {Boolean}
          */
+      $location.path('/end');
       if(!called) {
         called = true;
         ajaxRequest('api/confirmRestaurant', function(data) {
