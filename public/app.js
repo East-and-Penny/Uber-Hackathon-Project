@@ -9,7 +9,7 @@ angular.module('myApp', [
       // ...
       $routeProvider.when('/link1', {
         templateUrl: 'templates/select1.html',
-        controller: 'appCtrl'
+        controller: 'groupCtrl'
       });
       $routeProvider.when('/restaurant', {
         templateUrl: 'templates/select1.html',
@@ -27,9 +27,9 @@ angular.module('myApp', [
         templateUrl: 'templates/select1.html',
         controller: 'radiusCtrl'
       });
-      $routeProvider.when('/group', {
+      $routeProvider.when('/category', {
         templateUrl: 'templates/select1.html',
-        controller: 'groupCtrl'
+        controller: 'appCtrl'
       });
       $routeProvider.when('/loading', {
         templateUrl: 'templates/loading.html',
@@ -190,7 +190,8 @@ angular.module('myApp')
         uberResultFact.result = data.businesses;
         console.log(data);
       });
-      $location.path('/group');
+      $location.path('/loading');
+
     };
 
     $scope.choose2 = function() {
@@ -198,7 +199,8 @@ angular.module('myApp')
       ajaxRequest('api/getRestaurants', function(data) {
         uberResultFact.result = data.businesses;
       });
-      $location.path('/group');
+      $location.path('/loading');
+
     };
 
     $scope.choose3 = function() {
@@ -206,7 +208,8 @@ angular.module('myApp')
       ajaxRequest('api/getRestaurants', function(data) {
         uberResultFact.result = data.businesses;
       });
-      $location.path('/group');
+      $location.path('/loading');
+
     };
   })
   .controller('groupCtrl', function($scope, $location, uberFact) {
@@ -221,27 +224,28 @@ angular.module('myApp')
 
     $scope.choose1 = function() {
       uberFact.capacity = 2;
-      $location.path('/loading');
+      $location.path('/category');
     };
 
     $scope.choose2 = function() {
       uberFact.capacity = 4;
-      $location.path('/loading');
+      $location.path('/category');
     };
 
     $scope.choose3 = function() {
       uberFact.capacity = 7;
-      $location.path('/loading');
+      $location.path('/category');
     };
   })
-  .controller('loadingCtrl', function($scope, $location, uberResultFact) {
-    $scope.checkData = function() {
+  .controller('loadingCtrl', function($scope, $location, $timeout, uberResultFact) {
+    var checkData = function() {
       if(uberResultFact.result[0].name) {
         $location.path('/results');
+      } else {
+        $timeout(checkData, 1000);
       }
-      console.log('checking data',$location.path(), uberResultFact);
     };
-    setTimeout($scope.checkData,1000);
+    checkData();
   })
   .controller('resultsCtrl', function($scope, $location, uberResultFact) {
     var text = 'Make Uber Request To ';
