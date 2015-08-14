@@ -77,7 +77,11 @@ angular.module('myApp')
   .controller('appCtrl', function($scope, $location, yelpFact, uberFact) {
     $scope.choice1 = 'Restaurants';
     $scope.choice2 = 'Bars';
-    $scope.choice3 = 'Cafes';
+    $scope.choice3 = 'Cafés';
+
+    $scope.imageRoute1 = 'food.png';
+    $scope.imageRoute2 = 'drink.png';
+    $scope.imageRoute3 = 'coffee.png';
 
     $scope.location = function() {
       geoFindMe(function(latlon){
@@ -102,9 +106,12 @@ angular.module('myApp')
     $scope.location();
   })  
   .controller('restaurantCtrl', function($scope, $location, yelpFact) {
-    $scope.choice1 = 'Breakfast and Brunch';
+    $scope.choice1 = 'Breakfast / Brunch';
     $scope.choice2 = 'American';
     $scope.choice3 = 'No Preference';
+
+    $scope.imageRoute1 = 'muffin.png';
+    $scope.imageRoute2 = 'pizza.png';
 
     $scope.choose1 = function() {
       yelpFact.category_filter = 'restaurant,breakfast and brunch';
@@ -126,6 +133,10 @@ angular.module('myApp')
     $scope.choice2 = 'Dance Clubs';
     $scope.choice3 = 'No Preference';
 
+    $scope.imageRoute1 = 'beer.png';
+    $scope.imageRoute2 = 'dance.png';
+
+
     $scope.choose1 = function() {
       yelpFact.category_filter = 'bars,dive bars';
       $location.path('/radius');
@@ -146,6 +157,9 @@ angular.module('myApp')
     $scope.choice2 = 'Desserts';
     $scope.choice3 = 'No Preference';
 
+    $scope.imageRoute1 = 'coffee.png';
+    $scope.imageRoute2 = 'dessert.png';
+
     $scope.choose1 = function() {
       yelpFact.category_filter = 'cafes,coffee & tea';
       $location.path('/radius');
@@ -162,9 +176,13 @@ angular.module('myApp')
     };
   })
   .controller('radiusCtrl', function($scope, $location, yelpFact, uberResultFact) {
-    $scope.choice1 = 'Less Than 5 Miles Away';
-    $scope.choice2 = 'Less Than 10 Miles Away';
-    $scope.choice3 = 'Less Than 15 Miles Away';
+    $scope.choice1 = 'Within 5 miles';
+    $scope.choice2 = 'Within 10 miles';
+    $scope.choice3 = 'Within 15 miles';
+
+    $scope.imageRoute1 = 'short.png';
+    $scope.imageRoute2 = 'medium.png';
+    $scope.imageRoute3 = 'long.png';
 
     $scope.choose1 = function() {
       yelpFact.radius_filter = 8049;
@@ -192,9 +210,14 @@ angular.module('myApp')
     };
   })
   .controller('groupCtrl', function($scope, $location, uberFact) {
-    $scope.choice1 = 'Small Group (1-2)';
-    $scope.choice2 = 'Medium Group (3-4)';
-    $scope.choice3 = 'Large Group (5-7)';
+    $scope.choice1 = '1-2 People';
+    $scope.choice2 = '3-4 People';
+    $scope.choice3 = '5-7 People';
+
+    $scope.imageRoute1 = 'group-small.png';
+    $scope.imageRoute2 = 'group-medium.png';
+    $scope.imageRoute3 = 'group-large.png';
+
 
     $scope.choose1 = function() {
       uberFact.capacity = 2;
