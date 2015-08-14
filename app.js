@@ -84,7 +84,7 @@ app.get('/auth/uber/callback',
 app.get('/success', function(req, res){
   // console.log(req);
   console.log('auth is: ' + req.session.passport.user);
-  res.send('yay');
+  res.redirect('http://localhost:3000/#/link1');
 })
 
 // error handlers
