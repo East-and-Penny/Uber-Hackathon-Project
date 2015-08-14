@@ -317,7 +317,7 @@ angular.module('myApp')
       if(!called) {
         called = true;
         ajaxRequest('api/confirmRestaurant', function(data) {
-          return data;
+          console.log(data);
         }, obj);
       } else {
         
